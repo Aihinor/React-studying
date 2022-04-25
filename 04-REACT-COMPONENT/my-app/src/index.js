@@ -1,22 +1,50 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class App extends React.Component{
-  state = {
-    count:0
-  }
-  add = ()=>{
-    const count = this.state.count
-    this.setState({count:count+1})
-  }
-  render(){
-    return(
+const { Provider, Consumer } = React.createContext();
+
+class App extends React.Component {
+
+  render() {
+    return (
       <div>
-        <h1>计数器：{this.state.count}</h1>
-        <button onClick={this.add}>+1</button>
+        <Child2 />
       </div>
+    )
+  }
+
+}
+
+class Child2 extends React.Component {
+
+  state = {
+    count: 0
+  }
+
+  onIncreament = () => {
+    this.setState({
+      count: this.state.count + 1
+    })
+  }
+
+  render() {
+    return (
+      <Provider value={this.state.count}>
+        <div>
+          <button onClick={this.onIncreament}>+1</button>
+          <Child1/>
+        </div>
+      </Provider>
     )
   }
 }
 
-ReactDOM.render(<App/>,document.getElementById('root'))
+const Child1 = () => {
+  return (
+    <div>
+      <Consumer>{data => <h1>计数器：{data}</h1>}</Consumer>
+    </div>
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
